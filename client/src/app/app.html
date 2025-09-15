@@ -1,1 +1,8 @@
 <h1>{{ title() }}</h1> 
+
+<!-- Ciclo for en typescript para recorrer los miembros obtenidos de la API -->
+<ul>
+  @for (member of members(); track member.id){
+    <li>{{ member.id}} - {{member.displayName}}</li>
+  }
+</ul>
