@@ -33,6 +33,25 @@ public class AccountController(AppDbContext context) : BaseApiController
         return user; //Retornamos el usuario
     }
 
+    [HttpPost("login")]
+    public async Task<ActionResult<AppUser>> Login(LoginRequest request)
+    {
+        var user = await context.Users.SingleOrDefaultAsync(u => u.Email == request.Email); //Buscar usuario por email
+
+        if (user == null) return Unauthorized("Invalid email or password"); //Si no existe el usuario, retornamos error
+
+        using var hmac = new HMACSHA512(user.PasswordSalt); //Usamos la misma llave para encriptar la contraseña que se guardo
+
+        var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(request.Password)); //Encriptamos la contraseña que nos dieron
+
+        for (int i = 0; i < computedHash.Length; i++) //Comparamos los hashes
+        {
+            if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid email or password"); //Si no son iguales, retornamos error
+        }
+        
+        return user; //Si todo esta bien, retornamos el usuario
+    }
+
     //Para que no haya emails repetidos
     private async Task<bool> EmailExists(string email)
     {
