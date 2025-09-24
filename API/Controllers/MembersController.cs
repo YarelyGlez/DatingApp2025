@@ -1,10 +1,12 @@
 using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Controllers;
 
+[Authorize]
 public class MembersController(AppDbContext context) : BaseApiController
 {
     [HttpGet] // api/members
@@ -16,6 +18,7 @@ public class MembersController(AppDbContext context) : BaseApiController
         return members;
     }
 
+    [AllowAnonymous]
     //Se ejecuta este en lugar del de arriba cuando se pasa un id
     [HttpGet("{id}")] // Nos genera un localhost:5001/api/members/bob-id
     public async Task<ActionResult<AppUser>> GetMember(string id)
