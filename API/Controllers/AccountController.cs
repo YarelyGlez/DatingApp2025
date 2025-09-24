@@ -5,14 +5,15 @@ using System.Security.Cryptography;
 using System.Text;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
+using API.Interfaces;
 
 namespace API.Controllers;
 
-public class AccountController(AppDbContext context) : BaseApiController
+public class AccountController(AppDbContext context, ITokenService tokenService) : BaseApiController
 {
     //Inyectos y creamos metodos
     [HttpPost("register")]
-    public async Task<ActionResult<AppUser>> Register(RegisterRequest request) //Recibimos el request
+    public async Task<ActionResult<UserResponse>> Register(RegisterRequest request) //Recibimos el request
     {
         if (await EmailExists(request.Email)) return BadRequest("Email is already in use"); //Si el email ya existe Retornamos un error
 
@@ -30,11 +31,17 @@ public class AccountController(AppDbContext context) : BaseApiController
         context.Users.Add(user); //Magia de Entity Framework
         await context.SaveChangesAsync(); //Guardar cambios de manera asincrona
 
-        return user; //Retornamos el usuario
+        return new UserResponse
+        {
+            Id = user.Id,
+            DisplayName = user.DisplayName,
+            Email = user.Email,
+            Token = tokenService.CreateToken(user)          
+        };
     }
 
     [HttpPost("login")]
-    public async Task<ActionResult<AppUser>> Login(LoginRequest request)
+    public async Task<ActionResult<UserResponse>> Login(LoginRequest request)
     {
         var user = await context.Users.SingleOrDefaultAsync(u => u.Email == request.Email); //Buscar usuario por email
 
@@ -49,7 +56,13 @@ public class AccountController(AppDbContext context) : BaseApiController
             if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid email or password"); //Si no son iguales, retornamos error
         }
         
-        return user; //Si todo esta bien, retornamos el usuario
+        return new UserResponse
+        {
+            Id = user.Id,
+            DisplayName = user.DisplayName,
+            Email = user.Email,
+            Token = tokenService.CreateToken(user)          
+        };
     }
 
     //Para que no haya emails repetidos
