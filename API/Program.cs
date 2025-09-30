@@ -40,7 +40,9 @@ app.UseCors(x => x.AllowAnyHeader()
         "http://localhost:4200",
         "https://localhost:4200"
     ));
-
+    
+app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
