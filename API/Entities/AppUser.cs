@@ -2,6 +2,7 @@ using System;
 
 namespace API.Entities
 {
+    //Modela nuestra entidad de usuario en la base de datos
     public class AppUser
     {
         public string Id { get; set; } = Guid.NewGuid().ToString();
@@ -11,6 +12,6 @@ namespace API.Entities
         public required byte[] PasswordHash { get; set; } //Contrasenia que guarde el usuario
         public required byte[] PasswordSalt { get; set; } //Variacion de la contrasenia y se encripta de manera diferente
 
-        
+
     }
 }
