@@ -6,6 +6,7 @@ using System.Text;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
 using API.Interfaces;
+using API.Extensions;
 
 namespace API.Controllers;
 
@@ -30,14 +31,8 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
 
         context.Users.Add(user); //Magia de Entity Framework
         await context.SaveChangesAsync(); //Guardar cambios de manera asincrona
-
-        return new UserResponse
-        {
-            Id = user.Id,
-            DisplayName = user.DisplayName,
-            Email = user.Email,
-            Token = tokenService.CreateToken(user)          
-        };
+        //Se deriva de Extensions AppUserExtensions
+        return user.ToDTO(tokenService);
     }
 
     [HttpPost("login")]
@@ -56,13 +51,7 @@ public class AccountController(AppDbContext context, ITokenService tokenService)
             if (computedHash[i] != user.PasswordHash[i]) return Unauthorized("Invalid email or password"); //Si no son iguales, retornamos error
         }
         
-        return new UserResponse
-        {
-            Id = user.Id,
-            DisplayName = user.DisplayName,
-            Email = user.Email,
-            Token = tokenService.CreateToken(user)          
-        };
+        return user.ToDTO(tokenService);
     }
 
     //Para que no haya emails repetidos
