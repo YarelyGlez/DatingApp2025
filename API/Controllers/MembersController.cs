@@ -9,6 +9,7 @@ namespace API.Controllers;
 [Authorize]
 public class MembersController(AppDbContext context) : BaseApiController
 {
+    [AllowAnonymous]
     [HttpGet] // api/members
     public async Task<ActionResult<IReadOnlyList<AppUser>>> GetMembers()
     {
