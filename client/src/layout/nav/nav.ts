@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AccountService } from '../../core/services/account-service';
 
@@ -10,15 +10,25 @@ import { AccountService } from '../../core/services/account-service';
 })
 export class Nav {
   //Para el login 
-  private accountService = inject(AccountService);
+  protected accountService = inject(AccountService);
   //Creamos un objeto para las credenciales 
   protected creds: any = {};
   
+  //Para indicarle al DOM que el usuario no se ha registrado
+  //protected loggedIn = signal(false);
+
   //Hacemos un metodo login
   login(): void {
     this.accountService.login(this.creds).subscribe({
-      next: response => console.log(response),
+      next: response => {
+        console.log(response);
+        this.creds = {};
+      },
       error: error => alert(error.message)
     });
+  }
+
+  logout(): void{
+    this.accountService.logout();
   }
 }
