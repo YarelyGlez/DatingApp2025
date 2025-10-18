@@ -16,11 +16,9 @@
         </div>
     </div>
     } @else {
-        <!--Cuando este el modo de registro-->
-        <div class="w-full text-2xl text-center flex justify-center">
-            <app-register class="w-full" 
-            [membersFromHome]="membersFromApp"
-            (cancelRegister)="showRegister($event)"/>
-        </div>
+    <!--Cuando este el modo de registro-->
+    <div class="w-full text-2xl text-center flex justify-center">
+        <app-register class="w-full" (cancelRegister)="showRegister($event)" />
+    </div>
     }
 </div>
