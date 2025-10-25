@@ -18,4 +18,6 @@ public class Member
     // Navigation properties
     [ForeignKey(nameof(Id))]
     public AppUser User { get; set; } = null!;
+    //Generar vinculo hacia las fotos
+    public List<Photo> Photos { get; set; } = []; //List o Inumerable (solo serializar), list para busqueda y operaciones
 }
