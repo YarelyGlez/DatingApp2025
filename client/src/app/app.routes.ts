@@ -7,6 +7,7 @@ import { Messages } from '../features/messages/messages';
 import { authGuard } from '../core/guard/auth-guard';
 import { TestErrors } from '../features/test-errors/test-errors';
 import { NotFound } from '../shared/errors/not-found/not-found';
+import { ServerError } from '../shared/errors/server-error/server-error';
 
 //Indicamos las rutas a donde debera de ir nuestra app
 //Debemos indicar que parte se debe recargar
@@ -24,5 +25,6 @@ export const routes: Routes = [
         ]
     },
     { path: "errors", component: TestErrors }, //Manejo de errores 
+    { path: "server-error", component: ServerError }, 
     { path: "**", component: NotFound } //Cuando no hace match con ninguna
 ];
