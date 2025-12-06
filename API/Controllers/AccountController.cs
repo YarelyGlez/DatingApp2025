@@ -6,7 +6,7 @@ using System.Text;
 using API.DTOs;
 using Microsoft.EntityFrameworkCore;
 using API.Interfaces;
-using API.Extensions;
+using API.Mappers;
 
 namespace API.Controllers;
 
