@@ -9,14 +9,12 @@ namespace API.Controllers;
 [Authorize]
 public class MembersController(IMembersRepository membersRepository) : BaseApiController
 {
-   // [AllowAnonymous]
     [HttpGet] // api/members
     public async Task<ActionResult<IReadOnlyList<Member>>> GetMembers()
     {
         return Ok(await membersRepository.GetMembersAsync());
     }
 
-    //[AllowAnonymous]
     //Se ejecuta este en lugar del de arriba cuando se pasa un id
     [HttpGet("{id}")] // Nos genera un localhost:5001/api/members/bob-id
     public async Task<ActionResult<Member>> GetMember(string id)
